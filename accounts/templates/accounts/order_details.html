@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+
+<div style="margin: auto; width:50%; margin-top:50px; margin-bottom: 50px" >
+    <main class="col-md-12" >
+			<article class="card">
+			<header class="card-header">
+				<strong class="d-inline-block mr-3">Order ID: {{order.order_number}}</strong>
+				<span>Order Date: {{order.created_at.date}}</span>
+			</header>
+			<div class="card-body">
+				<div class="row"> 
+					<div class="col-md-8">
+						<h6 class="text-muted">Delivery to</h6>
+						<p>Name: {{order.first_name}} {{order.last_name}}<br>  
+						Phone: {{order.phone}}  <br>
+                        Email: {{order.email}} <br>
+						Location: {{order.address_line1}}, {{order.address_line2}} <br> 
+						
+						 </p>
+					</div>
+					<div class="col-md-4">
+						<h6 class="text-muted">Payment</h6>
+						<!-- <span class="text-success">
+							<i class="fab fa-lg fa-cc-visa"></i>
+							Visa  **** 4216  
+						</span>-->
+						<p>Subtotal: ${{total}} <br> 
+						 Shipping fee:  $500 <br> 
+						 <span class="b">Total:  ${{order.order_total}} </span>
+						</p>
+					</div>
+				</div> 
+				
+			</div> 
+			
+			<div class="table-responsive">
+			<table class="table table-hover">
+				<tr>
+                    {% for item in order_car %}
+					<td width="65">
+						<img src="{{ item.car.image.url }}" class="img-xs border">
+					</td>
+					<td> 
+						<p class="title mb-0">{{item.car.car_name}} </p>
+						<var class="price text-muted">{{item.quantity}}X{{item.car.price}}$</var>
+					</td>
+					<td> {{item.car.brand}} </td>
+				</tr>
+				{% endfor %}
+			</table>
+			</div> 
+			</article> 
+		</main> 
+    </div>
+
+{% endblock %}

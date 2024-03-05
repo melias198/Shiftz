@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+
+
+<!-- <div style="text-align: center;"><h2><b>Order History</b></h2></div> -->
+
+<table class="table table-bordered table-dark" style="width: 50%; margin:auto; margin-top:100px;margin-bottom:30px; text-align:center">
+    <thead>
+      <tr>
+        <th scope="col">#ID</th>
+        <th scope="col">Brand Name</th>
+        <th scope="col">Description</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+
+     {% for brand in brands %}
+      <tr>
+        <td>{{brand.id}}</td>
+        <td>{{brand.brand_name}}</td>
+        <td>{{brand.description}}</td>
+        <td><a href="{% url 'brand_update' brand.id %}" class="btn btn-primary btn-sm">Edit</a> <hr> <a href="{% url 'brand_delete' brand.id %}" class="btn btn-danger btn-sm">Delete</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="text-align: center; margin-bottom:20px">
+    <a href="{% url 'brand_upload' %}" class="btn btn-primary">Add Brand</a>
+  </div>
+
+{% endblock %}

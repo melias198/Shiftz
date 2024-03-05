@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+
+
+<!-- <div style="text-align: center;"><h2><b>Order History</b></h2></div> -->
+
+<table class="table table-bordered table-dark" style="width: 50%; margin:auto; margin-top:100px;margin-bottom:30px; text-align:center">
+    <thead>
+      <tr>
+        <th scope="col">#ID</th>
+        <th scope="col">Car Name</th>
+        <th scope="col">Vin</th>
+        <th scope="col">Price</th>
+        <th scope="col">Stock</th>
+        <th scope="col">Brand</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+
+     {% for car in cars %}
+      <tr>
+        <td>{{car.id}}</td>
+        <td>{{car.car_name}}</td>
+        <td>{{car.vin}}</td>
+        <td>{{car.price}}</td>
+        <td>{{car.stock}}</td>
+        <td>{{car.brand}}</td>
+        <td><a href="{% url 'car_update' car.id %}" class="btn btn-primary btn-sm">Edit</a> <hr> <a href="{% url 'car_delete' car.id %}" class="btn btn-danger btn-sm">Delete</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div style="text-align: center; margin-bottom:20px">
+    <a href="{% url 'car_upload' %}" class="btn btn-primary">Add Car</a>
+  </div>
+
+{% endblock %}

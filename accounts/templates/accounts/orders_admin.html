@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block body %}
+
+
+
+<!-- <div style="text-align: center;"><h2><b>Order History</b></h2></div> -->
+
+<table class="table table-bordered table-dark" style="width: 80%; margin:auto; margin-top:100px;margin-bottom:100px; text-align:center">
+    <thead>
+      <tr>
+        <th scope="col">#ID</th>
+        <th scope="col">User</th>
+        <th scope="col">Phone</th>
+        <th scope="col">Email</th>
+        <th scope="col">Address</th>
+        <th scope="col">Amount</th>
+        <th scope="col">Status</th>
+        <th scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+
+     {% for order in orders %}
+      <tr>
+        <td><a href="{% url 'order_details' order.id %}">{{order.order_number}}</a></td>
+        <td>{{order.user}}</td>
+        <td>{{order.phone}}</td>
+        <td>{{order.email}}</td>
+        <td>{{order.address_line1}},{{order.address_line2}}</td>
+        <td>{{order.order_total}}</td>
+        <td>{{order.status}}</td>
+        <td><a href="{% url 'update' order.id %}" class="btn btn-primary">Changes</a></td>
+      </tr>
+      {% endfor %}
+      
+    </tbody>
+  </table>
+
+{% endblock %}

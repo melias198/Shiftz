@@ -1,0 +1,138 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+ <!-- Breadcrumb End -->
+ <div class="breadcrumb-option set-bg" data-setbg="{% static 'images/breadcrumb-bg.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Car Listing</h2>
+                    <!-- <div class="breadcrumb__links">
+                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                        <span>About</span>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Begin -->
+
+<!-- Car Section Begin -->
+<section class="car spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3">
+                <div class="car__sidebar">
+                    <div class="car__search">
+                        <h5>Car Search</h5>
+                        <form action="{% url 'store' %}" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="search_query" placeholder="Search...">
+                            <button type="submit"><i class="fa fa-search"></i></button>
+                        </form>
+                    </div>
+                    <div class="car__filter">
+                        <h5>Car Filter</h5>
+
+                        <form action="{% url 'store' %}" method="post">
+                            {% csrf_token %}
+                            {{form}}
+                             
+                            <div class="car__filter__btn">
+                                <button type="submit" class="site-btn">Reset Filter</button>
+                            </div>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9">
+                <div class="car__filter__option">
+                    <div class="row">
+                        <div class="col-lg-6 col-md-6">
+                            <div class="car__filter__option__item">
+                                <h6>Show On Page</h6>
+                                <select>
+                                    <option value="">{{cars|length}}</option>
+                                </select>
+
+                                <!-- <input type="text" readonly value="{{ cars|length }}"> -->
+                            </div>
+                        </div>
+                        <!-- <div class="col-lg-6 col-md-6">
+                            <div class="car__filter__option__item car__filter__option__item--right">
+                                <h6>Sort By</h6>
+                                <select>
+                                    <option value="">Price: Highest Fist</option>
+                                    <option value="">Price: Lowest Fist</option>
+                                </select>
+                            </div>
+                        </div> -->
+                    </div>
+                </div>
+                <div class="row">
+
+                    {% for car in cars %}
+
+                    <div class="col-lg-4 col-md-4" style="align-items: center;">
+                        <div class="car__item" >
+                            <div class="car__item__pic__slider owl-carousel">
+                                <img src="{{car.image.url}}" alt="">
+                            </div>
+                            <div class="car__item__text">
+                                <div class="car__item__text__inner">
+                                    <div class="label-date">{{car.created_date.year}}</div>
+                                    <h5><a href="{% url 'car_details' car.brand.slug car.slug  %}">{{car.car_name}}</a></h5>
+                                    <h6><b>${{car.price}}</b></h6>
+                                    <p style="margin-top: 5px;">Description: {{car.description}}<p>
+                                    <!-- <ul>
+                                        <li><span>35,000</span> mi</li>
+                                        <li>Auto</li>
+                                        <li><span>700</span> hp</li>
+                                    </ul> -->
+                                </div>
+                                <div class="card-body d-flex justify-content-center" style="margin-top: -30px;">
+                                    
+                                    {% if user.is_authenticated %}
+                                    <a href="{% url 'add_cart' car.id %}" class="btn btn-primary" style="width: 100%;">Buy Now</a>
+                                    {% else %}
+                                    <a href="{% url 'login' %}" class="btn btn-primary" style="width: 100%;">Buy Now</a>
+                                    {% endif %}
+                                </div>
+        
+                            </div>
+                        </div>
+                    </div>
+
+                    {% endfor %}
+
+                </div>
+                <div class="pagination__option">
+                    {% if cars.has_previous %}
+                    <a href="?page={{cars.previous_page_number}}"><span class="arrow_carrot-2left"></span></a>
+                    {% else %}
+                    <a class="disabled"><span class="arrow_carrot-2left"></span></a>
+                    {% endif %}
+                    
+                    {% for i in cars.paginator.page_range %}
+                    <a href="?page={{i}}" class="">{{i}}</a>
+                    {% endfor %}
+
+                    {% if cars.has_next %}
+                    <a href="?page={{cars.next_page_number}}"><span class="arrow_carrot-2right"></span></a>
+                    {% else %}
+                    <a class="disabled"><span class="arrow_carrot-2right"></span></a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Car Section End -->
+
+{% endblock %}

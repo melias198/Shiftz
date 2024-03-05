@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static  %}
+
+
+{% block body %}
+
+  <!-- Breadcrumb End -->
+  <div class="breadcrumb-option set-bg" data-setbg="{% static 'images/breadcrumb-bg.jpg' %}">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12 text-center">
+                <div class="breadcrumb__text">
+                    <h2>Car Details</h2>
+                    <!-- <div class="breadcrumb__links">
+                        <a href="./index.html"><i class="fa fa-home"></i> Car listing</a>
+                         <a href="#">Car Details</a> 
+                        <span>Car Details</span>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Breadcrumb Begin -->
+
+<!-- Car Details Section Begin -->
+<section class="car-details spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="car__details__pic">
+                    <div class="car__details__pic__large">
+                        <img class="car-big-img" src="{{cars.image.url}}" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3">
+                <div class="car__details__sidebar">
+                    <div class="car__details__sidebar__model">
+                        <ul>
+                            <li>Stock <span>{{cars.stock}}</span></li>
+                            <li>Vin <span>{{cars.vin}}</span></li>
+                        </ul>
+                        <!-- <a href="#" class="primary-btn">Get Today Is Price</a>
+                        <p>Pricing in 11/26/2019</p> -->
+                    </div>
+                    <div class="car__details__sidebar__payment">
+                        <ul>
+                            <li>Model <span>{{cars.car_name}}</span></li>
+                            <li>Brand <span>{{cars.brand}}</span></li>
+                            <li>Release <span>{{cars.created_date.date}}</span></li>
+
+                            {% if cars.is_available %}
+                            <li>Available <span>Yes</span></li>
+                            {% else %}
+                            <li>Available <span>No</span></li>
+                            {% endif %}
+
+                            <li>Price <span>${{cars.price}}</span></li>
+                        </ul>
+                        {% if user.is_authenticated %}
+                        <a href="{% url 'add_cart' cars.id %}" class="primary-btn"> Buy Now</a>
+                        {% else %}
+                        <a href="{% url 'login' %}" class="primary-btn"> Buy Now</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- Car Details Section End -->
+
+{% endblock %}
