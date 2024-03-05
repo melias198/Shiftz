@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-s=gnpahyeh*!5l@@_+_2ox!j5h^l68ap0&6do77iu@90&(9_6c
 DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-CSRF_TRUSTED_ORIGINS = ['https://shiftz.onrender.com/','https://127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['https://*.shiftz.onrender.com/','https://127.0.0.1']
 
 # Application definition
 
