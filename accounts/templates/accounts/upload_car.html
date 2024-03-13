@@ -2,7 +2,49 @@
 {% load crispy_forms_tags %}
 {% block body %}
 
+<section class="section-conten padding-y bg" style="margin-top: 50px;margin-bottom:60px">
 
+	<div class="container">
+		<div class="row">
+		<aside class="col-md-3">
+			<!--   SIDEBAR   -->
+			<ul class="list-group">
+				<a class="text-primary list-group-item" href="{% url 'profile' %}">Profile </a>
+				<a class="text-primary list-group-item" href="{% url 'admin_orders' %}"> Order list </a>
+				<a class="text-primary list-group-item" href="{% url 'brand_view' %}"> Brand list </a>
+				<a class="text-primary list-group-item" href="{% url 'car_view' %}"> Car list </a>
+				<a class="text-primary list-group-item" href="{% url 'brand_upload' %}"> Add Brand </a>
+				<a class="list-group-item active" href="{% url 'car_upload' %}"> Add Car </a>
+				<!-- <a class="text-primary list-group-item" href=""> Track order </a> -->
+			</ul>
+			<br>
+			<a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+			<!--   SIDEBAR .//END   -->
+		</aside>
+		
+		<main class="col-md-9">
+			<!-- <article class="card"> -->
+
+				<form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                
+                    {{form|crispy}}
+                
+                    <div style="text-align: center;">
+                    <button class="btn btn-info" type="submit">Add</button>
+                </div>
+                </form>
+				
+
+			<!-- </article>  -->
+		</main>
+	</div> <!-- row.// -->
+	</div>
+	
+	
+	</section>
+
+<!-- 
 <div class="" style="width: 50%; margin: auto; margin-top:20px; margin-bottom:20px;">
 <form action="" method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -13,5 +55,6 @@
     <button class="btn btn-info" type="submit">Add</button>
 </div>
 </form>
-</div>
+</div> -->
+
 {% endblock %}

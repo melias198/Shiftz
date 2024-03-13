@@ -1,11 +1,26 @@
 {% extends 'base.html' %}
-{% load static %}
 
 {% block body %}
 
+<section class="section-conten padding-y bg" style="margin-top: 50px; margin-bottom:60px">
 
-<div style="margin: auto; width:50%; margin-top:50px; margin-bottom: 50px" >
-    <main class="col-md-12" >
+	<div class="container">
+		<div class="row">
+		<aside class="col-md-3">
+			<!--   SIDEBAR   -->
+			<ul class="list-group">
+				<a class="text-primary list-group-item" href="{% url 'profile' %}">Profile </a>
+				<a class="text-primary list-group-item" href="{% url 'history' %}"> My order history </a>
+				<a class="list-group-item active" href="{% url 'history' %}"> Order Details </a>
+				<a class="text-primary list-group-item" href="{% url 'transaction_history' %}"> Transactions </a>
+				<a class="text-primary list-group-item" href="{% url 'completed' %}"> Received orders </a>
+				<a class="text-primary list-group-item" href="{% url 'track' %}"> Track order </a>
+			</ul>
+			<br>
+			<a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+			<!--   SIDEBAR .//END   -->
+		</aside>
+		<main class="col-md-9">
 			<article class="card">
 			<header class="card-header">
 				<strong class="d-inline-block mr-3">Order ID: {{order.order_number}}</strong>
@@ -15,46 +30,50 @@
 				<div class="row"> 
 					<div class="col-md-8">
 						<h6 class="text-muted">Delivery to</h6>
-						<p>Name: {{order.first_name}} {{order.last_name}}<br>  
-						Phone: {{order.phone}}  <br>
-                        Email: {{order.email}} <br>
-						Location: {{order.address_line1}}, {{order.address_line2}} <br> 
-						
-						 </p>
+						<p>{{order.first_name}} {{order.last_name}}<br>  
+						Phone: {{order.phone}} <br>
+						Email: {{order.email}} <br>
+						Location: {{order.address_line1}}, {{order.address_line1}}, {{order.city}},  {{order.state}}, {{order.country}} <br> 
+						</p>
 					</div>
 					<div class="col-md-4">
 						<h6 class="text-muted">Payment</h6>
-						<!-- <span class="text-success">
-							<i class="fab fa-lg fa-cc-visa"></i>
-							Visa  **** 4216  
-						</span>-->
-						<p>Subtotal: ${{total}} <br> 
-						 Shipping fee:  $500 <br> 
-						 <span class="b">Total:  ${{order.order_total}} </span>
+						<span class="text-success">
+							<!-- <i class="fab fa-lg fa-cc-visa"></i> -->
+							{{order.payment.payment_method}} <br>
+							Transaction ID: {{order.payment.payment_id}}
+						</span>
+						<p>Subtotal: ${{total}} <br>
+						 Shipping Fee:  $500 <br> 
+						 <span class="b">Total: ${{order.order_total}} </span>
 						</p>
 					</div>
-				</div> 
-				
-			</div> 
-			
+				</div> <!-- row.// -->
+			</div> <!-- card-body .// -->
 			<div class="table-responsive">
 			<table class="table table-hover">
+				{% for obj in order_car %}
 				<tr>
-                    {% for item in order_car %}
 					<td width="65">
-						<img src="{{ item.car.image.url }}" class="img-xs border">
+						<img src="{{obj.car.image.url}}" class="img-xs border">
 					</td>
 					<td> 
-						<p class="title mb-0">{{item.car.car_name}} </p>
-						<var class="price text-muted">{{item.quantity}}X{{item.car.price}}$</var>
+						<p class="title mb-0">{{obj.car.car_name}} </p>
+						<var class="price text-muted">${{obj.car.price}} X {{obj.quantity}}</var>
 					</td>
-					<td> {{item.car.brand}} </td>
+					<td> Brand <br> {{obj.car.brand}}</td>
+					<td><a class="btn btn-primary btn-sm" href="{% url 'order_track' order.id  %}">Track Order</a></td>
+					
 				</tr>
 				{% endfor %}
 			</table>
-			</div> 
-			</article> 
-		</main> 
-    </div>
+			</div> <!-- table-responsive .end// -->
+			</article> <!-- order-group.// --> 
+		</main>
+	</div> <!-- row.// -->
+	</div>
+	
+	
+	</section>
 
 {% endblock %}

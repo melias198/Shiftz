@@ -23,12 +23,12 @@
             </div>
         </div>
         <div class="row car-filter" style="margin-top: 20px;">
-            {% for car in cars %}
+            {% for car in cars|slice:":8" %}
             <div class="col-lg-3 col-md-4 col-sm-6 mix">
                 <div class="car__item">
-                    <div class="car__item__pic__slider owl-carousel">
+                    <!-- <div class="car__item__pic__slider owl-carousel"> -->
                         <img src="{{car.image.url}}" alt="">
-                    </div>
+                    <!-- </div> -->
                     <div class="car__item__text">
                         <div class="car__item__text__inner">
                             <div class="label-date">{{car.created_date.year}}</div>
@@ -47,6 +47,10 @@
                 </div>
             </div>
             {% endfor %}
+            
+            <div style="margin-left: 15px;"><a href="{% url 'store' %}" class="text-primary">See More..</a></div>
+                
+            
             
         </div>
     </div>

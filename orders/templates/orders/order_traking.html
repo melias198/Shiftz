@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block body %}
+
+
+<section class="section-conten padding-y bg" style="margin-top: 50px; margin-bottom:60px">
+
+	<div class="container">
+		<div class="row">
+		<aside class="col-md-3">
+			<!--   SIDEBAR   -->
+			<ul class="list-group">
+				<a class="text-primary list-group-item" href="{% url 'profile' %}">Profile </a>
+				<a class="text-primary list-group-item" href="{% url 'history' %}"> My order history </a>
+				<a class="text-primary list-group-item" href="{% url 'transaction_history' %}"> Transactions </a>
+				<a class="text-primary list-group-item" href="{% url 'completed' %}"> Received orders </a>
+				<a class="list-group-item active" href="{% url 'track' %}"> Track order </a>
+			</ul>
+			<br>
+			<a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+			<!--   SIDEBAR .//END   -->
+		</aside>
+		<main class="col-md-9">
+			<!-- <article class="card"> -->
+
+				<div class="content-wrapper">
+                    <div class="row">
+                        <div class="col-lg-12 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title" style="text-align: center;">
+                                        Track Order Status
+                                        <p class="text-muted">Order: {{order.order_number}}</p>
+                                    </h4>
+                                    <hr/>
+                                    <div class="table-responsive">
+                
+                                            <ol class="ProgressBar">
+                                                {% for i in orderstatus %}
+                                                <li class="ProgressBar-step {% if i.0 <= order.status %}is-complete{% endif %}">
+                                                    <svg class="ProgressBar-icon">
+                                                        <use xlink:href="#checkmark-bold"/>
+                                                    </svg>
+                                                    <span class="ProgressBar-stepLabel">{{i.1}}</span>
+                                                </li>
+                                                {% endfor %}
+                                            </ol>
+                                        </div>
+                
+                                        <svg xmlns="http://www.w3.org/2000/svg">
+                                            <symbol id="checkmark-bold" viewBox="0 0 24 24">
+                                                <path d="M20.285 2l-11.285 11.567-5.286-5.011-3.714 3.716 9 8.728 15-15.285z"/>
+                                            </symbol>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+			<!-- </article>  -->
+		</main>
+	</div> <!-- row.// -->
+	</div>
+	
+	
+	</section>
+
+{% endblock %}
+

@@ -16,13 +16,14 @@ class Payment(models.Model):
 
 class Order(models.Model):
     STATUS = (
-        ('Pending','Pending'),
-        ('Accepted','Accepted'),
-        ('Completed','Completed'),
-        ('Cancelled','Cancelled'),
+        (1,'Pending'),
+        (2,'Accepted'),
+        (3,'Placed'),
+        (4,'Shipped'),
+        (5,'Delivered'),
     )
     user = models.ForeignKey(User,on_delete=models.CASCADE)
-    # payment = models.ForeignKey(Payment,on_delete=models.CASCADE)
+    payment = models.ForeignKey(Payment,on_delete=models.CASCADE,null=True)
     order_number = models.CharField(max_length=30)
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
@@ -35,7 +36,7 @@ class Order(models.Model):
     city = models.CharField(max_length=100)
     order_note = models.CharField(max_length=100)
     order_total = models.FloatField()
-    status = models.CharField(max_length=10,choices=STATUS,default='Pending')
+    status = models.IntegerField(choices=STATUS,default=1)
     ip = models.CharField(max_length=50,blank=True,null=True)
     is_ordered = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)

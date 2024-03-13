@@ -1,36 +1,60 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block body %}
 
 
+<section class="section-conten padding-y bg" style="margin-top: 50px; margin-bottom:60px;">
 
-<!-- <div style="text-align: center;"><h2><b>Order History</b></h2></div> -->
+	<div class="container">
+		<div class="row">
+		<aside class="col-md-3">
+			<!--   SIDEBAR   -->
+			<ul class="list-group">
+				<a class="text-primary list-group-item" href="{% url 'profile' %}">Profile </a>
+				<a class="text-primary list-group-item" href="{% url 'history' %}"> My order history </a>
+				<a class="text-primary list-group-item" href="{% url 'transaction_history' %}"> Transactions </a>
+				<a class="list-group-item active" href="{% url 'completed' %}"> Received orders </a>
+				<a class="text-primary list-group-item" href="{% url 'track' %}"> Track order </a>
+			</ul>
+			<br>
+			<a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+			<!--   SIDEBAR .//END   -->
+		</aside>
+		<main class="col-md-9">
+			<!-- <article class="card"> -->
 
-<table class="table table-bordered table-dark" style="width: 50%; margin:auto; margin-top:100px;margin-bottom:100px; text-align:center">
-    <thead>
-      <tr>
-        <th scope="col">#ID</th>
-        <th scope="col">Amount</th>
-        <th scope="col">Status</th>
-        <th scope="col">Details</th>
-      </tr>
-    </thead>
-    <tbody>
+				<table class="table table-bordered" style="text-align: center;">
+                    <thead>
+                      <tr>
+                        <th scope="col">#ID</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Status</th>
+                        <th scope="col">Details</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+					{% for order in orders %}
+                    {% if order.status == 5 %}
+                      <tr>
+                        <td><a class="text-primary" href="{% url 'order_details' order.id %}">{{order.order_number}}</a></td>
+                        <td>${{order.order_total}}</td>
+                        <td><a href="{% url 'order_track' order.id %}" class="btn btn-warning btn-sm">Delivered</a></td>
+						<td><a href="{% url 'order_details' order.id %}" class="btn btn-info btn-sm">Details</a></td>
+                      </tr>
+                      {% else %}
+                      {% endif %}
+                    {% endfor %}
+                    </tbody>
+                  </table>
+				
 
-     {% for order in orders %}
-     {% if order.status == 'Completed' %}
-      <tr>
-        <td>{{order.order_number}}</td>
-        <td>{{order.order_total}}</td>
-        <td>{{order.status}}</td>
-        <td><a href="{% url 'order_details' order.id %}" class="btn btn-primary">Details</a></td>
-      </tr>
-      {% else %}
-      
-      {% endif %}
-      {% endfor %}
-      
-    </tbody>
-  </table>
+			<!-- </article>  -->
+		</main>
+	</div> <!-- row.// -->
+	</div>
+	
+	
+	</section>
 
 {% endblock %}

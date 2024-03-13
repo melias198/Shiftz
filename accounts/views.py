@@ -1,19 +1,22 @@
-from django.shortcuts import render,redirect
+from django.shortcuts import render,redirect,reverse
 from django.contrib.auth import login,logout,authenticate
-from .forms import RegistrationForm,OrderUpdateForm,BrandForm,CarForm
-from orders.models import Order,OrderCar
+from .forms import RegistrationForm,OrderUpdateForm,BrandForm,CarForm,UpdateForm,OrderStatusForm
+from orders.models import Order,OrderCar,Payment
 from categories.models import Brand
 from cars.models import Car
+from django.contrib import messages
 
 
 # Create your views here.
 def sign_up(request):
-    form = RegistrationForm
+    form = RegistrationForm()
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
-            print(form)
-            user = form.save()
+            user = form.save(commit=False)
+            # user.is_active = False  
+            user.backend = 'django.contrib.auth.backends.ModelBackend' # specify 
+            user.save()
             login(request,user)
             return redirect('home')
     return render(request,'accounts/sign-up.html',{'form':form})
@@ -27,6 +30,9 @@ def sign_in(request):
         if user is not None:
             login(request,user)
             return redirect('home')
+        else:
+            messages.error(request, 'Invalid username or password')
+            return render(request, 'accounts/sign-in.html')
     return render(request,'accounts/sign-in.html')
 
 
@@ -36,6 +42,17 @@ def profile(request):
     return render(request,'accounts/dashboard.html')
 
 
+def profile_update(request):
+    user = request.user
+    form = UpdateForm(instance=user)
+    if request.method == 'POST':
+        form = UpdateForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    return render(request,'accounts/update.html',{'form':form})
+
+
 def sign_out(request):
     logout(request)
     return redirect('home')
@@ -43,6 +60,13 @@ def sign_out(request):
 def order_history(request):
     orders = Order.objects.filter(user=request.user)
     return render(request,'accounts/order_history.html',{'orders':orders})
+
+
+def track_order(request):
+    orders = Order.objects.filter(user=request.user)
+    return render(request,'accounts/order_track.html',{'orders':orders})
+
+
 
 def order_details(request,id):
     order = Order.objects.get(id=id)
@@ -55,6 +79,17 @@ def order_details(request,id):
 def order_complete(request):
     orders = Order.objects.filter(user=request.user)
     return render(request,'accounts/order_complete.html',{'orders':orders})
+
+
+def transaction_history(request):
+    transactions = Payment.objects.filter(user=request.user)
+    return render(request,'accounts/transaction.html',{'transactions':transactions})
+
+
+def transaction_details(request,id):
+    order_obj = Order.objects.get(payment__id=id)
+    print(order_obj.id)
+    return redirect(reverse('order_details', args=[order_obj.id]))
 
 
 def orders_admin(request):
@@ -73,6 +108,25 @@ def admin_update(request,id):
                 form.save()
                 return redirect('admin_orders')
         return render(request,'accounts/update.html',{'form':form})
+    
+
+def update_status(request,id):
+    if request.user.is_staff:
+        order = Order.objects.get(id=id)
+        form = OrderStatusForm(instance=order)
+        if request.method == 'POST':
+            form = OrderStatusForm(request.POST,instance=order)
+            if form.is_valid():
+                form.save()
+                return redirect('admin_orders')
+        return render(request,'accounts/update.html',{'form':form})
+
+
+def admin_order_details(request,id):
+    order = Order.objects.get(id=id)
+    order_car = OrderCar.objects.filter(order=order)
+    total = order.order_total - 500
+    return render(request,'accounts/admin_order_details.html',{'order':order,'order_car':order_car,'total':total})
 
 def brand_view(request):
     if request.user.is_staff:

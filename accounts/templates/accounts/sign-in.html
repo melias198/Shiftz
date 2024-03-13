@@ -4,7 +4,7 @@
 
 
 
-<div class="wrapper" style=" width:50%;  margin: auto; margin-bottom:50px; margin-top:50px;">
+<!-- <div class="wrapper" style=" max-width: 380px;  margin: auto; margin-bottom:50px; margin-top:50px;">
    <div class="responsive-card auth-small">
       <div class="card">
          <div class="card-body">
@@ -39,6 +39,60 @@
          </div>
       </div>
    </div>
-      </div>
+      </div> -->
+
+      <section class="section-conten padding-y" style="min-height:84vh">
+
+         <!-- ============================ COMPONENT LOGIN   ================================= -->
+            <div class="card mx-auto" style="max-width: 380px; margin-top:100px;">
+              <div class="card-body">
+      
+              <h4 class="card-title mb-4" style="text-align: center;">Sign In</h4>
+              <form method="post">
+               {% csrf_token %}
+                 <div class="form-group">
+                   <input type="text" class="form-control" placeholder="Username" name="username">
+                 </div> <!-- form-group// -->
+                 <div class="form-group">
+                  <input type="password" class="form-control" placeholder="Password" name="password">
+                 </div> <!-- form-group// -->
+      
+                 {% if messages %}
+               <div class="alert alert-danger" role="alert">
+                  {% for message in messages %}
+                     {{ message }}
+                  {% endfor %}
+               </div>
+            {% endif %}
+                 
+                  <div class="form-group">
+                    <a href="{% url 'password-reset' %}" class="text-primary float-right">Forgot password?</a>  
+                  </div>  
+                     
+                  <!-- form-group form-check .// -->
+      
+      
+                 <div class="form-group">
+                    <button type="submit" class="btn btn-primary btn-block"> Login  </button>
+                 </div> <!-- form-group// -->    
+              </form>
+      
+                <div style="text-align: center;">
+                  <h6 class="text-muted" style="margin-bottom: 10px;">Or, Sign In With</h6>
+              
+                  <a class="btn btn-danger " href="{% url 'social:begin' 'google-oauth2' %}">Google</a>
+                  <a class="btn btn-primary " href="{% url 'social:begin' 'facebook' %}">Facebook</a>
+
+              </div>
+      
+              </div> <!-- card-body.// -->
+            </div> <!-- card .// -->
+         
+             <p class="text-center mt-4">Don't have account? <a class="text-primary" href="{% url 'register' %}">Sign Up</a></p>
+             <br><br>
+         <!-- ============================ COMPONENT LOGIN  END.// ================================= -->
+         
+         
+         </section>
 
 {% endblock %}

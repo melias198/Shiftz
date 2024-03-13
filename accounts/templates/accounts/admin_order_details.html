@@ -1,0 +1,80 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<section class="section-conten padding-y bg" style="margin-top: 50px; margin-bottom:60px">
+
+	<div class="container">
+		<div class="row">
+		<aside class="col-md-3">
+			<!--   SIDEBAR   -->
+			<ul class="list-group">
+				<a class="text-primary list-group-item" href="{% url 'profile' %}">Profile </a>
+				<a class="text-primary list-group-item" href="{% url 'admin_orders' %}"> Order list </a>
+				<a class="list-group-item active" href="{% url 'admin_orders' %}"> Order details </a>
+				<a class="text-primary list-group-item" href="{% url 'brand_view' %}"> Brand list </a>
+				<a class="text-primary list-group-item" href="{% url 'car_view' %}"> Car list </a>
+				<a class="text-primary list-group-item" href="{% url 'brand_upload' %}"> Add Brand </a>
+				<a class="text-primary list-group-item" href="{% url 'car_upload' %}"> Add Car </a>
+			</ul>
+			<br>
+			<a class="btn btn-light btn-block" href="{% url 'logout' %}"> <i class="fa fa-power-off"></i> <span class="text">Log out</span> </a> 
+			<!--   SIDEBAR .//END   -->
+		</aside>
+		<main class="col-md-9">
+			<article class="card">
+			<header class="card-header">
+				<strong class="d-inline-block mr-3">Order ID: {{order.order_number}}</strong>
+				<span>Order Date: {{order.created_at.date}}</span>
+			</header>
+			<div class="card-body">
+				<div class="row"> 
+					<div class="col-md-8">
+						<h6 class="text-muted">Delivery to</h6>
+						<p>{{order.first_name}} {{order.last_name}}<br>  
+						Phone: {{order.phone}} <br>
+						Email: {{order.email}} <br>
+						Location: {{order.address_line1}}, {{order.address_line1}}, {{order.city}},  {{order.state}}, {{order.country}} <br> 
+						</p>
+					</div>
+					<div class="col-md-4">
+						<h6 class="text-muted">Payment</h6>
+						<span class="text-success">
+							<!-- <i class="fab fa-lg fa-cc-visa"></i> -->
+							{{order.payment.payment_method}} <br>
+							Transaction ID: {{order.payment.payment_id}}
+						</span>
+						<p>Subtotal: ${{total}} <br>
+						 Shipping Fee:  $500 <br> 
+						 <span class="b">Total: ${{order.order_total}} </span>
+						</p>
+					</div>
+				</div> <!-- row.// -->
+                <a class="btn btn-info" href="{% url 'update_status' order.id %}">Give Order Update</a>
+			</div> <!-- card-body .// -->
+			<div class="table-responsive">
+			<table class="table table-hover">
+				{% for obj in order_car %}
+				<tr>
+					<td width="65">
+						<img src="{{obj.car.image.url}}" class="img-xs border">
+					</td>
+					<td> 
+						<p class="title mb-0">{{obj.car.car_name}} </p>
+						<var class="price text-muted">${{obj.car.price}} X {{obj.quantity}}</var>
+					</td>
+					<td> Brand <br> {{obj.car.brand}}</td>
+					
+				</tr>
+				{% endfor %}
+			</table>
+			</div> <!-- table-responsive .end// -->
+			</article> <!-- order-group.// --> 
+		</main>
+	</div> <!-- row.// -->
+	</div>
+	
+	
+	</section>
+
+{% endblock %}
