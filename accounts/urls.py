@@ -26,4 +26,8 @@ urlpatterns = [
     path('car_upload/',views.car_upload,name='car_upload'),
     path('car_update/<int:id>',views.car_update,name='car_update'),
     path('car_delete/<int:id>',views.delete_car,name='car_delete'),
+    
+    
+    path("verify-email/<slug:username>", views.verify_email, name="verify-email"),
+    path("resend-otp", views.resend_otp, name="resend-otp"),
 ]
