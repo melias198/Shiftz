@@ -13,5 +13,5 @@ BRAND_WITH_PLACEHOLDER = [("", "Select Brand")] + list(BRAND)
 CARS_WITH_PLACEHOLDER = [("", "Select Car")] + list(CARS)
 
 class CarFilterForm(forms.Form):
-    brand_filter = forms.ChoiceField(choices=BRAND_WITH_PLACEHOLDER,required=False,label="Brand Filter")
-    model_filter = forms.ChoiceField(choices=CARS_WITH_PLACEHOLDER,required=False,label="Model Filter")
+    brand = forms.ChoiceField(choices=BRAND_WITH_PLACEHOLDER,required=False,label="Brand Filter")
+    model = forms.ChoiceField(choices=CARS_WITH_PLACEHOLDER,required=False,label="Model Filter")

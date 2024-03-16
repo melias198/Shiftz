@@ -9,7 +9,12 @@
         <div class="row">
             <div class="col-lg-12 text-center">
                 <div class="breadcrumb__text">
-                    <h2>Car Listing</h2>
+                    <h2>Search Results</h2>
+                    {% if total %}
+                    <p class="text-muted">{{total}} items found for "{{search_query}}"</p>
+                    {% else %}
+                    <p class="text-muted">No items found for "{{search_query}}"</p>
+                    {% endif %}
                     <!-- <div class="breadcrumb__links">
                         <a href="./index.html"><i class="fa fa-home"></i> Home</a>
                         <span>About</span>
@@ -27,7 +32,6 @@
         <div class="row">
             <div class="col-lg-3">
                 <div class="car__sidebar">
-
                     <div class="car__search">
                         <h5>Car Search</h5>
                         <form action="{% url 'search_by_cars' %}" method="get">
@@ -58,12 +62,10 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-6">
                             <div class="car__filter__option__item">
-                                <!-- <h6>Show On Page <span style="border: 2px;"> {{cars|length}}</span></h6> -->
-                                
-                                <h6>Show On Page<div style="width: 40px; display: inline-block; text-align:center; background-color:white; margin-left:10px">{{cars|length}}</div></h6>
 
-                                
-                                <!-- <select>
+                                <h6>Show On Page<div style="width: 40px; display: inline-block; text-align:center; background-color:white; margin-left:10px">{{cars|length}}</div></h6>
+                                <!-- <h6>Show On Page</h6>
+                                <select>
                                     <option value="">{{cars|length}}</option>
                                 </select> -->
 
@@ -120,17 +122,17 @@
                 </div>
                 <div class="pagination__option">
                     {% if cars.has_previous %}
-                    <a href="?page={{cars.previous_page_number}}"><span class="arrow_carrot-2left"></span></a>
+                    <a href="?page={{cars.previous_page_number}}&search_query={{search_query}}"><span class="arrow_carrot-2left"></span></a>
                     {% else %}
                     <a class="disabled"><span class="arrow_carrot-2left"></span></a>
                     {% endif %}
                     
                     {% for i in cars.paginator.page_range %}
-                    <a href="?page={{i}}" class="">{{i}}</a>
+                    <a href="?page={{i}}&search_query={{search_query}}" class="">{{i}}</a>
                     {% endfor %}
 
                     {% if cars.has_next %}
-                    <a href="?page={{cars.next_page_number}}"><span class="arrow_carrot-2right"></span></a>
+                    <a href="?page={{cars.next_page_number}}&search_query={{search_query}}"><span class="arrow_carrot-2right"></span></a>
                     {% else %}
                     <a class="disabled"><span class="arrow_carrot-2right"></span></a>
                     {% endif %}

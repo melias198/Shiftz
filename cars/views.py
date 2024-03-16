@@ -7,46 +7,60 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 
 # Create your views here.
-def cars(request,brand_slug=None):
-    cars =None
-    brands = None
-    search_query = None
-    
-    if request.method == 'POST':
-        search_query = request.POST.get('search_query', '') 
-        cars = Car.objects.filter(car_name__icontains=search_query) 
-        
-        form = CarFilterForm(request.POST)
-        
-        if form.is_valid() and not search_query:
-            brand_slug = form.cleaned_data.get('brand_filter')
-            model_slug = form.cleaned_data.get('model_filter')
-    
-            if brand_slug:
-                brand = get_object_or_404(Brand,slug=brand_slug)
-            else:
-                brand = None
-            
-            query = Q(is_available=True)
-            if brand:
-                query &= Q(brand=brand)
-            if model_slug:
-                query &= Q(slug=model_slug)
-
-            cars = Car.objects.filter(query)
-            
-    else:
-        brands = Brand.objects.all()
-        cars = Car.objects.all()
-        form = CarFilterForm()
+def cars(request):
+    brands = Brand.objects.all()
+    cars = Car.objects.all()
+    form = CarFilterForm()
         
     page = request.GET.get('page')
     paginator = Paginator(cars, 3)
     page_obj = paginator.get_page(page)
     
-    context = {'cars':page_obj,'brands':brands,'form':form,'search_query':search_query}
-        
+    context = {'cars':page_obj,'brands':brands,'form':form}
     return render(request,'cars/car.html',context)
+
+
+def search_view(request):
+    if request.method == 'GET':
+        search_query = request.GET.get('search_query', '')
+        cars = Car.objects.filter(car_name__icontains=search_query)
+        brands = Brand.objects.all()
+        form = CarFilterForm()
+    
+    page = request.GET.get('page')
+    paginator = Paginator(cars, 3)
+    page_obj = paginator.get_page(page)
+    total = len(cars)
+    
+    context = {'cars':page_obj,'brands':brands,'form':form,'search_query':search_query,'total':total}
+    return render(request,'cars/search.html',context)
+
+
+def filter_view(request):
+    if request.method == 'GET':
+        form = CarFilterForm(request.GET)
+        if form.is_valid():
+            brand_filter = form.cleaned_data.get('brand')
+            model_filter = form.cleaned_data.get('model')
+            
+        brands = Brand.objects.all()
+            
+        query = Q(is_available=True)
+        if brand_filter:
+            query &= Q(brand__slug=brand_filter)
+        if model_filter:
+            query &= Q(slug=model_filter)
+
+        cars = Car.objects.filter(query)
+    
+    page = request.GET.get('page')
+    paginator = Paginator(cars, 3)
+    page_obj = paginator.get_page(page)
+    total = len(cars)
+    
+    context = {'cars':page_obj,'brands':brands,'form':form,'brand':brand_filter,'model':model_filter,'total':total}
+    return render(request,'cars/filter.html',context)
+
 
 
 def car_details(request,brand_slug,car_slug):

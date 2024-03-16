@@ -20,21 +20,13 @@ def cart(request):
         cart_items = CartItem.objects.filter(user=request.user)
         for item in cart_items:
             total += item.car.price*item.quantity
-    # else:
-    #     session_id = create_session(request)
-    #     cart = Cart.objects.filter(cart_id=session_id).exists()
-    #     if cart:
-    #         cart_id = Cart.objects.get(cart_id=session_id) 
-    #         cart_items = CartItem.objects.filter(cart=cart_id)
-    #         for item in cart_items:
-    #             total += item.product.price*item.quantity
     
     if total:
         shipping_fee = 500
     final_total = total+shipping_fee
     return render(request,'carts/cart.html',{'cart_items':cart_items,'fee':shipping_fee,'total':total,'final_total':final_total})
 
-
+@login_required
 def add_to_cart(request,car_id):
     car = Car.objects.get(id=car_id)
     session_id = create_session(request)
@@ -44,7 +36,7 @@ def add_to_cart(request,car_id):
         if cart_id:
             cart_item = CartItem.objects.filter(car=car,user=request.user).exists()
             if cart_item:
-                item = CartItem.objects.get(car=car)
+                item = CartItem.objects.get(car=car,user=request.user)
                 item.quantity += 1
                 item.save()
             else:
@@ -74,13 +66,13 @@ def add_to_cart(request,car_id):
     
     return redirect('cart')
 
-
+@login_required
 def remove_cart(request,car_id):
     car = Car.objects.get(id=car_id)
     session_id = request.session.session_key
     cart_id = Cart.objects.get(cart_id=session_id)
     
-    cart_item = CartItem.objects.get(cart=cart_id,car=car)
+    cart_item = CartItem.objects.get(user=request.user,car=car)
     if cart_item.quantity > 1:
         cart_item.quantity -= 1
         cart_item.save()
@@ -89,13 +81,13 @@ def remove_cart(request,car_id):
         
     return redirect('cart')
 
+@login_required
 def delete_cart(request,car_id):
     car = Car.objects.get(id=car_id)
     session_id = request.session.session_key
     cart_id = Cart.objects.get(cart_id=session_id)
-    print(car_id)
-    print(car)
-    cart_item = CartItem.objects.get(cart=cart_id,car=car)
+    
+    cart_item = CartItem.objects.get(user=request.user,car=car)
     cart_item.delete()
     
     return redirect('cart')
